@@ -35,11 +35,42 @@ public class ProductInventory {
      */
     Map<Integer, String> findProductNames() {
         // TODO: replace stub implementation
-        Map<Integer, String> stubMap = new HashMap<Integer, String>();
-        for (Integer productID : productIDs) {
-            stubMap.put(productID, "");
+        //Map<Integer, String> stubMap = new HashMap<Integer, String>();
+        //for (Integer productID : productIDs) {
+        //    stubMap.put(productID, "");
+        //}
+        //return stubMap;
+
+        // Guard statements
+        if (productUtility == null) {
+            throw new IllegalArgumentException("productUtility is null");
         }
-        return stubMap;
+        if (productIDs == null) {
+            throw new IllegalArgumentException("productID is null");
+        }
+
+        // Initialize the Map
+        Map<Integer, String> productMap = new HashMap<>();
+
+        // Loop over the list of Product IDs
+        for (Integer productID : productIDs) {
+            try {
+                // Call the ProductUtility method to get the name
+                String productName = productUtility.findProductName(productID);
+
+                // If the productName is not null, add it to the map
+                if (productName != null) {
+                    productMap.put(productID, productName);
+                }
+
+            } catch (NullPointerException e) {
+                // Handle the NullPointerException
+                throw new IllegalArgumentException("productID is null");
+            }
+        }
+
+        // Return the Map
+        return productMap;
     }
 
     /**
@@ -49,7 +80,29 @@ public class ProductInventory {
      */
     Optional<Boolean> isProductReady(Integer productID) {
         // TODO: replace stub implementation
-        Boolean stubResult = productUtility.isProductReady(0);
-        return Optional.of(stubResult);
+        //Boolean stubResult = productUtility.isProductReady(0);
+        //return Optional.of(stubResult);
+
+        try {
+            // Check for null productID first
+            if (productID == null) {
+                throw new IllegalArgumentException("The productID was null");
+            }
+
+            // Call the ProductUtility method
+            Boolean isReady = productUtility.isProductReady(productID);
+
+            // Return an empty Optional if the result is null
+            if (isReady == null) {
+                return Optional.empty();
+            }
+
+            // Wrap the Boolean in an Optional and return
+            return Optional.of(isReady);
+
+        } catch (NullPointerException e) {
+            // Handle the NullPointerException
+            throw new IllegalArgumentException("The productID was null");
+        }
     }
 }
